@@ -1,0 +1,186 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{CJKutf8}
+\usepackage{tikz}
+
+\author{Wenye Xiong 2023533141}
+\title{Strategic Insights from Guandan: Analyzing Dynamic Games with Incomplete Information}
+\begin{document}
+\maketitle
+\begin{abstract}
+    This essay explores the strategic intricacies of Guandan, a popular Chinese card game, through the lens of game theory, specifically focusing on dynamic games with incomplete information. 
+    Guandan, involving four players in two partnerships, is renowned for its complexity and strategic depth, 
+    and becomes popular in Jiangsu and its surrounding areas. By constructing a game model that accounts for players, strategies, payoffs, and information sets, 
+    this analysis delves into two famous strategic principles 
+    \begin{CJK*}{UTF8}{gbsn}"对手剩五张,出牌宜成双" \end{CJK*}
+    (When the opponent has five cards left, play two-card combinations) and 
+    \begin{CJK*}{UTF8}{gbsn}"枪不打四"  \end{CJK*}
+    (Do not try using a powerful combination to beat a four-card set). 
+    These strategies are examined using concepts like Perfect Bayesian Equilibrium and Signaling, 
+    illustrating how players make decisions under uncertainty and adjust their strategies based on evolving beliefs. 
+    The findings highlight the application of game theory in understanding and optimizing decision-making in Guandan, 
+    offering broader implications for strategic interactions in dynamic and uncertain environments.
+\end{abstract}
+\section{Introduction}
+Guandan, a popular Chinese card game, is renowned for its complexity and strategic depth, attracting players with its intricate rules and challenging gameplay. 
+Originating in Huai'an, Jiangsu and its surrounding areas, Guandan involves four players in two partnerships, each aiming to win tricks and maximize their points. \\
+\\ \hspace*{\fill} \\
+Here we introduce the Overview rules of Guandan:\\
+Guandan is a card game where four players are divided into two teams, using two standard decks of cards (a total of 108 cards) to compete. 
+The outcome of each round determines the specific number of levels upgraded. The card combinations in Guandan and their descriptions are shown in Table 1.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    Combination & Description \\ \hline
+    Single & Any single card in a player's hand \\ \hline
+    Pair & Two cards with the same rank \\ \hline
+    Triple Pair	& Three consecutive pairs \\ \hline
+    Three of a Kind	& Three cards with the same rank \\ \hline
+    Consecutive Three of a Kind	& Two consecutive three of a kind \\ \hline
+    Three with a Pair & Three of a kind with an additional pair of the same rank \\ \hline
+    Straight & Five consecutive single cards \\ \hline
+    Bomb & Four or more cards of the same rank \\ \hline
+    Straight Flush & Five consecutive cards of the same suit \\ \hline
+    Four Jokers	& Two red and two black jokers \\ \hline
+    \end{tabular}
+    \caption{Card Combinations in Guandan}
+\end{table}
+In each round, the first player to play all their cards is considered the "upper hand," and depending on whether their teammate is the second, third, or last to finish, they will respectively advance 3 levels, 2 levels, or 1 level. Therefore, not only do players need to compete against the other team, but they also need to cooperate with their teammate to maximize the overall benefit for their team.\\
+\\ \hspace*{\fill} \\
+The leading player in each trick can play a single card, three of a kind, triple pair, five-card straight, bomb, or any other combination that fits the rules of Guandan. The remaining players must follow suit until no one can follow. The player with the highest card combination in the current trick leads the next trick. When a player has 6 or fewer cards left after playing a hand, they reach the reporting phase. Before the next round begins, the last player must tribute their highest card (excluding the hearts-level card) to the upper hand, who must then return a card to the last player. Each round of Guandan includes two hearts-level cards, which can be transformed into any card of any suit or rank except for the red and black jokers. Their presence makes the card combinations flexible and varied, significantly enlarging the game’s decision tree.\\
+\section{Game Model}
+To analyze Guandan from a game-theoretic perspective, we construct a game model that captures the key elements of the game, including players, strategies, payoffs, 
+and information sets. However, we only discuss a simple subgame situtation in this essay, since the full analysis of the game is too complex. 
+Specifically, we focus on the subgames of the last 6 cards situation, which is the most critical part of the game and where players are forced to announce the number of cards they have remaining.\\
+\subsection{Assumptions}
+The model is based on the following assumptions:
+\begin{itemize}
+    \item There are four players, divided into two partnerships, with each player having imperfect information about the other players' cards.
+    \item Players make decisions sequentially, with each player observing the previous players' moves and adjusting their strategies accordingly.
+    \item Players aim to maximize their points by winning tricks and advancing levels, with the ultimate goal of winning the game.
+    \item Players' strategies are based on their beliefs about the other players' cards, which evolve as the game progresses.
+    \item The game involves uncertainty and incomplete information, requiring players to make strategic decisions under conditions of limited knowledge.
+\end{itemize}
+\subsection{Game Formulation}
+\textbf{Players:}\\
+There are four players, labeled as Player 1, Player 2, Player 3, and Player 4, with Players 1 and 3 forming one partnership and Players 2 and 4 forming the other. Since we are focusing on the last 6 cards situation, we let Player 1 has 6 cards on hand and it is Player 1's turn to play. Also, we introduce nature, denoted by N, as a pseudo-player who determines the types of cards that Players have.\\
+\\ \hspace*{\fill} \\
+\textbf{Order of Play:}\\
+\begin{itemize}
+    \item Nature (N) determines the types of cards that Players have. For Player 1, we assume that the 6 cards he has basically have the two following types:  
+    any five-cards combination (Three with a Pair, Straight, Straight Flush) and a single card, or a pair with a bomb. We make this assumption to simplify the analysis and because these are the most common types of card combinations in the last 6 cards situation.\\
+    \item Player 1 plays a card combination based on his beliefs about the other players' cards. We mainly focus on the case where the strategic principles 
+    \begin{CJK*}{UTF8}{gbsn}"对手剩五张,出牌宜成双" \end{CJK*}
+    (When the opponent has five cards left, play two-card combinations) and 
+    \begin{CJK*}{UTF8}{gbsn}"枪不打四"  \end{CJK*}
+    (Do not try using a powerful combination to beat a four-card set) work. So here we assume Player 1 either plays a two-card combination or a single card.
+    \item Player 2 plays a card combination based on his beliefs about the other players' cards.
+    \item \dots
+    \item Game ends when all players have played their cards, and the points are calculated based on the card combinations played.
+\end{itemize}
+\\ \hspace*{\fill} \\
+\textbf{Information Sets and Actions:}\\
+Player 1 has an information set consisting of the possible card combinations that Player 1 can play, including single cards, pairs, three of a kind, etc. 
+Player 1's actions are to choose a card combination to play based on his beliefs about the other players' cards.\\
+Player 2 has two information sets: one is an information set consisting of the possible card combinations that Player 2 can play, 
+and the other is the signal received from Player 1's play. Player 2's actions are to choose a card combination to play based on his beliefs about the other players' cards.\\
+Player 3 and Player 4 follow the same logic as Player 2.\\
+\\ \hspace*{\fill} \\
+\textbf{Utility:}\\
+According to the rule of Guandan, the player team which has players' order in 1,2 will get 3 levels, in 1,3 will get 2 levels, and in 1,4 will get 1 level. All other situations will get 0 levels.\\
+The utilty function of each team can be defined as below:\\
+$U_{1,3} = max(f(p_1) + f(p_3) - 10, 0)$, $U_{2,4} = max(f(p_2) + f(p_4) - 10, 0)$, where $f(p_i)$ is the level that player i gets.\\
+\\ \hspace*{\fill} \\
+Here $f(p_i)$ is a payoff function that depends on players' orders. It is described as below:\\
+\begin{equation}
+    f(p_i) = \left\{
+    \begin{array}{rcl}
+    10 & \text{if} & p_i = 1 \\
+    3 & \text{if} & p_i = 2 \\
+    2 & \text{if} & p_i = 3 \\
+    1 & \text{if} & p_i = 4 \\
+    \end{array} \right.
+\end{equation}
+\section{Analysis of Strategic Principles}
+The last 6 cards Game of Guandan is a dynamic game with asymmetric and incomplete information
+where the proper equilibrium concept is the perfect Bayesian equilibrium (PBE). \\
+\\ \hspace*{\fill} \\
+\textbf{Perfect Bayesian Equilibrium:}\\
+Before Player 1 plays his card combination, Player 2 has his beliefs about the possible card combinations that Player 1 can play. Here we consider the possibility that Player 1 has a powerful combination (Straight Flush, Bomb), which would beat any other card combination. 
+Before Player 1 plays, Player 2 believes that Player 1 has a powerful combination with a certain probability Pr(Bomb) for Bomb, Pr(SF) for Straight Flush, Pr(Weak) for other weaker combinations.\\
+Player 2's strategy is to play a card combination that maximizes his expected utility given his beliefs about Player 1's card combinations. After observing Player 1's play, Player 2 updates his beliefs based on the signal received. \\
+\textbf{Pooling Equilibrium:}\\
+1. In a Pooling Equilibrium, for Player 1, he will always try to play a pair if possible, otherwise he will play a single card. Player 2 will never try to beat Player 1's card combination.\\
+2. Pr(Bomb) = Pr(SF) = Pr(Weak) = 1/3.\\
+\\ \hspace*{\fill} \\
+In this case, because the possibility of Player 1 having a powerful combination is always no smaller than he having a weak combination, Player 2 will always play a weak combination.\\
+\\ \hspace*{\fill} \\
+\textbf{Seperating Equilibrium:}\\ 
+1. In a Seperating Equilibrium, Player 1 will play a pair or single if he has a Bomb or a Straight Flush, otherwise he will play a weak combination. 
+And if Player 1 plays a weak combination, Player 2 will try to beat him with a powerful combination. If Player 1 plays a pair or a single, Player 2 will not try to beat him.\\
+2. Pr(Bomb) = 1/3, Pr(SF) = 1/3, Pr(Weak) = 1/3.\\
+\\ \hspace*{\fill} \\
+After the signal of Player 1 is received, Player 2 will update his beliefs. In the case where Player 1 plays a pair, the possibility of Player 1 having a Bomb is updated according to Bayes' Rule.\\
+\\ \hspace*{\fill} \\
+$
+    Pr(Bomb|pair) = \frac{Pr(pair|Bomb)Pr(Bomb)}{Pr(Pair)}
+$\\
+
+Consider the formula $\frac{Pr(pair|Bomb)}{Pr{Pair}}$, we can see that if Player 1 has a Bomb and a Pair, he would always play out the Pair first. So $Pr(pair|Bomb) = 1$. For $Pr(Pair)$, the case happens when Player 1 has a Bomb, or sometime other weak combinations. So the $\frac{1}{3} < Pr(Pair) < \frac{2}{3}$. 
+And we can see that after the signal is received, Player 2 updates his beliefs that the possibility of Player 1 having a Bomb is higher than before. 
+So Player 2 will not waste effort on playing a powerful combination to beat Player 1.\\
+Thus we can see that the strategic principle
+\begin{CJK*}{UTF8}{gbsn}"枪不打四"  \end{CJK*}
+is a rational strategy in the last 6 cards situation of Guandan.\\
+\\ \hspace*{\fill} \\
+In the case where Player 1 plays a single card, Player 2 will update his beliefs according to the signal received. The possibility of Player 1 having a Straight Flush or a weak combination is updated according to Bayes' Rule.\\
+\\ \hspace*{\fill} \\
+$
+    Pr(SF|single) = \frac{Pr(single|SF)Pr(SF)}{Pr(single)}
+$\\
+
+This equation is just the same case as the pair situation. So we can see that Player 2 will not waste effort on playing a powerful combination to beat Player 1. \\
+Next , we will talk about the strategic principle
+\begin{CJK*}{UTF8}{gbsn}"对手剩五张,出牌宜成双" \end{CJK*}. \\
+Assume that after playing a full round of single card after Player 1 playing a single, now it's Player 2's turn to play random combination.\\
+Given Player 1 didn't play out the Straight Flush, Player 1's card combination can only be a weak combination. Consider two five-cards combination, Straight and Three with a Pair.
+Obviously, if Player 1 has Straight on hand, Player 2 would play pair to let Player 1 has nothing to play. But if Player 1 has Three with a Pair, Player 2 would play a single card to let Player 1 face the dilemma of seperating his cards or not.\\
+\\ \hspace*{\fill} \\
+\textbf{Pooling Equilibrium:}\\
+1. In a Pooling Equilibrium, s(Straight) = s(Three with a Pair) = NA. That means Player 1 will always skip his turn to play.
+2. Pr(Straight) = Pr(Three with a Pair) = 1/2.\\
+\\ \hspace*{\fill} \\
+In this case, playing a single card and playing a pair is of same utility for Player 2.\\
+\\ \hspace*{\fill} \\
+\textbf{Seperating Equilibrium:}\\
+1. In a Seperating Equilibrium, s(Straight) = NA, s(Three with a Pair) = NA or single. That means Player 1 will always skip his turn to play if he has a Straight, and will either play a single card or skip if he has a Three with a Pair. The possibility of him playing a single is the same as the possibility of him skipping.\\
+2. Pr(Straight) = 1/2, Pr(Three with a Pair) = 1/2.\\
+\\ \hspace*{\fill} \\
+In last round, Player 1 gives a signal of skipping his turn to play. Player 2 will update his beliefs according to the signal received. The possibility of Player 1 having a Straight or a Three with a Pair is updated according to Bayes' Rule.\\
+\\ \hspace*{\fill} \\
+$
+    Pr(Straight|NA) = \frac{Pr(NA|Straight)Pr(Straight)}{Pr(NA)}
+$, \\
+$
+    Pr(Three with a Pair|NA) = 1 - Pr(Straight|NA)
+$\\
+\\ \hspace*{\fill} \\
+Consider the formula $\frac{Pr(NA|Straight)}{Pr(NA)}$, we can see that if Player 1 has a Straight, he would never seperate his Straight to play a single card. So $Pr(NA|Straight) = 1$. For $Pr(NA)$, the case could sometimes not happen if Player 1 has a Three with a Pair, since it could be rational for Player 1 to seperate his cards. So the $ Pr(NA) < 1$.
+And we can see that after the signal is received, Player 2 updates his beliefs that the possibility of Player 1 having a Straight is higher than before. So Player 2 will play a pair to let Player 1 has nothing to play.\\
+Thus we can see that the strategic principle
+\begin{CJK*}{UTF8}{gbsn}"对手剩五张,出牌宜成双" \end{CJK*}
+is a rational strategy in the last 6 cards situation of Guandan.\\
+\section{Conclusion}
+This essay has explored the strategic intricacies of Guandan, a popular Chinese card game, through the lens of game theory, focusing on dynamic games with incomplete information. By constructing a game model that captures the key elements of the game, including players, strategies, payoffs, and information sets, we have analyzed two famous strategic principles in Guandan:
+\begin{CJK*}{UTF8}{gbsn}"对手剩五张,出牌宜成双" \end{CJK*}
+(When the opponent has five cards left, play two-card combinations) and
+\begin{CJK*}{UTF8}{gbsn}"枪不打四"  \end{CJK*}
+(Do not try using a powerful combination to beat a four-card set). These strategies have been examined using concepts like Perfect Bayesian Equilibrium and Signaling, illustrating how players make decisions under uncertainty and adjust their strategies based on evolving beliefs. The findings highlight the application of game theory in understanding and optimizing decision-making in Guandan, offering broader implications for strategic interactions in dynamic and uncertain environments.
+\\ \hspace*{\fill} \\
+In the future, further research could explore more complex game models of Guandan, considering additional factors such as the presence of hearts-level cards, the impact of different card combinations, and the role of signaling in strategic decision-making. By delving deeper into the strategic intricacies of Guandan, we can gain valuable insights into the dynamics of strategic interactions in uncertain and competitive environments, offering new perspectives on decision-making and cooperation in complex games.
+\end{document}
